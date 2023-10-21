@@ -104,35 +104,34 @@ def get_own_stock_df(driver):
         "預り区分",
     ]
 
-    # スプレッドシートのスキーマに合わせたデータフレームを作成する
-    columns = ["コード", "市場", "名称", "業種", "保有株式数", "購入単価", "現在単価", "1株配当"]
+    # DBのスキーマに合わせたデータフレームを作成する
+    columns = ["ticker", "name", "quantity", "purchase_price", "current_price"]
     dtypes = {
-        "コード": "object",
-        "市場": "object",
-        "名称": "object",
-        "業種": "object",
-        "保有株式数": "int64",
-        "購入単価": "float",
-        "現在単価": "float",
-        "1株配当": "float",
+        "ticker": "object",
+        "name": "object",
+        "quantity": "int64",
+        "purchase_price": "float",
+        "current_price": "float",
     }
     df_own_stock = pd.DataFrame(columns=columns).astype(dtypes)
 
     # 整形なしで入れられるデータはそのまま入れる
-    df_own_stock[["コード", "名称"]] = df_all_stock[["コード", "名称"]]
+    df_own_stock[["ticker", "name"]] = df_all_stock[["コード", "名称"]]
 
-    # データを整形して入れる
+    # 他のデータは整形して入れる
 
     # "3,160円 / -10   -0.32%" → 3160.0
-    df_own_stock["現在単価"] = df_all_stock["現在値/前日比"].apply(
+    df_own_stock["current_price"] = df_all_stock["現在値/前日比"].apply(
         lambda x: float(extract_number(x))
     )
 
     # "7 株" → 7
-    df_own_stock["保有株式数"] = df_all_stock["保有数量"].apply(lambda x: int(extract_number(x)))
+    df_own_stock["quantity"] = df_all_stock["保有数量"].apply(
+        lambda x: int(extract_number(x))
+    )
 
     # "3,215 円" → 3215
-    df_own_stock["購入単価"] = df_all_stock["平均取得単価"].apply(
+    df_own_stock["purchase_price"] = df_all_stock["平均取得単価"].apply(
         lambda x: int(extract_number(x))
     )
 
