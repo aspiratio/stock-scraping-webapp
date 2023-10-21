@@ -20,12 +20,10 @@ def get_document_ids(collection_name):
         )
 
         # すべてのドキュメントを取得
-        print(collection)
         docs = collection.get()
-        print(docs)
 
         # ドキュメントIDのみを抽出
-        docs_ids = [docs.id for doc in docs]
+        docs_ids = [doc.id for doc in docs]
 
         return docs_ids
 
