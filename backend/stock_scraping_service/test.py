@@ -138,7 +138,7 @@ def get_own_stock_df(driver):
 
     print("SBI scraping finished")
 
-    return df_own_stock.to_json(orient="records", force_ascii=False)
+    return df_own_stock.to_dict(orient="records")
 
 
 if __name__ == "__main__":
@@ -153,7 +153,9 @@ if __name__ == "__main__":
     try:
         # 証券会社のwebサイトから保有株情報を抽出する
         dict_own_stock = get_own_stock_df(driver)
-        set_documents("own_stock", dict_own_stock)
+
+        collection_name = "own_stock"
+        set_documents(collection_name, dict_own_stock)
     except Exception as e:
         print("Failed get_own_stock_df")
         print(str(e))

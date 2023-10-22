@@ -29,14 +29,13 @@ def get_document_ids(collection_name: str):
         print(str(e))
 
 
-def set_documents(collection_name: str, json_values: json):
-    values = json.loads(json_values)
+def set_documents(collection_name: str, data: dict):
     try:
-        for value in values:
-            print(value)
+        for value in data:
             # ドキュメントを指定
-            # doc_ref = root_doc.collection(collection_name).document(value.ticker)
-            # doc_
+            doc_ref = root_doc.collection(collection_name).document(value["ticker"])
+            # 値を追加（既にドキュメントが存在していれば更新）
+            doc_ref.set(value)
 
     except Exception as e:
         print(str(e))
