@@ -7,9 +7,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from extract_number import extract_number
+from firestore_utils import set_documents
 
 import config
+
+import re
+
+
+def extract_number(text):
+    """
+    文字列から数値部分のみを抽出するための関数
+    """
+    number = re.findall(r"[-+]?\d*\.\d+|\d+", text.replace(",", ""))[0]
+    return number
 
 
 def get_own_stock_df(driver):
@@ -152,6 +162,10 @@ if __name__ == "__main__":
     try:
         # 証券会社のwebサイトから保有株情報を抽出する
         dict_own_stock = get_own_stock_df(driver)
+
+        # DBに保有株情報を登録する
+        collection_name = "own_stock"
+        set_documents(collection_name, dict_own_stock)
 
     except Exception as e:
         print("保有株情報の抽出・登録に失敗しました")

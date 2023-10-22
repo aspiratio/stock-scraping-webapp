@@ -1,5 +1,5 @@
-import json
 from google.cloud import firestore
+from datetime import datetime
 import config
 
 # 最上流のコレクション名
@@ -34,6 +34,10 @@ def set_documents(collection_name: str, data: dict):
         for value in data:
             # ドキュメントを指定
             doc_ref = root_doc.collection(collection_name).document(value["ticker"])
+
+            # last_updated_timeフィールドに現在のタイムスタンプを追加
+            value["last_updated_time"] = firestore.SERVER_TIMESTAMP
+
             # 値を追加（既にドキュメントが存在していれば更新）
             doc_ref.set(value)
 
