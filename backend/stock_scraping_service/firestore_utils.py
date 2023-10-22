@@ -1,5 +1,4 @@
 from google.cloud import firestore
-from google.cloud.firestore_v1.base_query import FieldFilter
 import config
 
 # 最上流のコレクション名
@@ -44,29 +43,24 @@ def set_documents(collection_name: str, data: dict):
 
             set_tickers.append(value["ticker"])
 
-        print("ドキュメントの登録に成功しました")
+        print(f"{collection_name}にドキュメントの登録が成功しました")
         return set_tickers
 
     except Exception:
         raise
 
 
-def delete_documents_except_tickers(collection_name: str, tickers: list):
-    """
-    指定したtickerを持つドキュメント以外を削除する
-    """
-    ref = root_doc.collection(collection_name)
+def delete_all_documents(collection_name: str):
     try:
-        docs_to_delete = ref.where(
-            filter=FieldFilter("ticker", "not-in", tickers)
-        ).get()
+        # コレクションを取得
+        collection = root_doc.collection(collection_name)
 
-        print(docs_to_delete)
+        # すべてのドキュメントを取得
+        docs = collection.get()
 
-        for doc in docs_to_delete:
-            print(doc.reference)
+        for doc in docs:
             doc.reference.delete()
-        print("ドキュメントの削除に成功しました")
+
+        print(f"{collection_name}内のドキュメントを全削除しました")
     except Exception:
-        print("ドキュメントの削除に失敗しました")
         raise

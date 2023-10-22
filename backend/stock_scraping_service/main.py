@@ -7,7 +7,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from firestore_utils import delete_documents_except_tickers, set_documents
+from firestore_utils import (
+    set_documents,
+    delete_all_documents,
+)
 
 import config
 
@@ -164,11 +167,9 @@ if __name__ == "__main__":
         # 証券会社のwebサイトから保有株情報を抽出する
         dict_own_stock = get_own_stock_df(driver)
 
-        # DBに保有株情報を登録する
-        set_tickers = set_documents(collection_name, dict_own_stock)
-
-        # 保有していない株情報を削除する
-        delete_documents_except_tickers(collection_name, set_tickers)
+        # DBの保有株情報を削除して入れ直す
+        delete_all_documents(collection_name)
+        set_documents(collection_name, dict_own_stock)
 
         print("DBの更新が完了しました")
     except Exception as e:
