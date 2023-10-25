@@ -11,7 +11,7 @@ db = firestore.Client()
 root_doc = db.collection(root_collection_name).document(root_doc_id)
 
 
-def get_document_ids(collection_name: str):
+def get_all_document_ids(collection_name: str):
     try:
         # コレクションを取得
         collection = root_doc.collection(collection_name)
