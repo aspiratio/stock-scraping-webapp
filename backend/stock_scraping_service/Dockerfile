@@ -1,3 +1,4 @@
+# stock-scraping-webapp/backend ディレクトリでビルドコマンドを実行する
 FROM python:3.11-slim
 
 # aptパッケージマネージャが対話的なモードを使用しないように設定する
@@ -19,15 +20,14 @@ RUN CHROMEDRIVER_VERSION=`curl -sS https://googlechromelabs.github.io/chrome-for
   && curl -sS -o /tmp/chromedriver_linux64.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip \
 	&& unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip
 
-WORKDIR /app
+WORKDIR /app/stock_scraping_service
 
 # 必要なファイルを作業ディレクトリにコピー
 COPY stock_scraping_service/main.py .
-COPY stock_scraping_service/firestore_utils.py .
-COPY stock_scraping_service/config.py .
 COPY stock_scraping_service/requirements.txt .
-COPY sa.json .
-COPY .env .
+COPY utils ..
+# COPY sa.json .
+# COPY .env .
 
 RUN pip install -r requirements.txt
 

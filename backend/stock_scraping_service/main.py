@@ -7,12 +7,13 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from firestore_utils import (
+
+from utils.firestore_utils import (
     set_documents,
     delete_all_documents,
 )
 
-import config
+from utils import config
 
 import re
 

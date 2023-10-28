@@ -1,5 +1,5 @@
 from google.cloud import firestore
-import config
+from utils import config
 
 # 最上流のコレクション名
 root_collection_name = config.FIRESTORE_COLLECTION
