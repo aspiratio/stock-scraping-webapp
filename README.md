@@ -20,3 +20,12 @@
     - 取得した配当金情報を DB に登録する
   - スプレッドシートの更新
     - DB に登録された株情報と配当金情報を元に、スプレッドシートを更新する
+
+## ビルド方法
+
+実行環境：M1 Mac
+下記コマンドを実行
+
+```sh
+docker build --platform linux/amd64 -t stock_scraping_service -f stock_scraping_service/Dockerfile .
+```
