@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 # aptパッケージマネージャが対話的なモードを使用しないように設定する
 ENV DEBIAN_FRONTEND noninteractive
@@ -8,10 +8,7 @@ RUN cp -a /etc/localtime /etc/localtime.origin && ln -sf /usr/share/zoneinfo/Asi
 
 # 必要なパッケージのインストール
 RUN apt update
-RUN apt install -y curl
-RUN apt install -y wget
-RUN apt install -y unzip
-RUN apt install -y gpg
+RUN apt install -y curl wget unzip
 
 # Google Chromeをインストール
 RUN wget -q --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
