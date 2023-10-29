@@ -1,6 +1,9 @@
 # ルートディレクトリでビルドコマンドを実行する
 FROM python:3.11-slim
 
+# Cloud Runでコンテナがリッスンするポートを設定
+ENV PORT 8080
+
 # aptパッケージマネージャが対話的なモードを使用しないように設定する
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -21,9 +24,6 @@ RUN CHROMEDRIVER_VERSION=`curl -sS https://googlechromelabs.github.io/chrome-for
 	&& unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip
 
 WORKDIR /app/stock_scraping_service
-
-RUN pwd
-RUN ls
 
 # 必要なファイルを作業ディレクトリにコピー
 COPY backend/stock_scraping_service/main.py .
