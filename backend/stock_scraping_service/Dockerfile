@@ -22,6 +22,9 @@ RUN CHROMEDRIVER_VERSION=`curl -sS https://googlechromelabs.github.io/chrome-for
 
 WORKDIR /app/stock_scraping_service
 
+RUN pwd
+RUN ls
+
 # 必要なファイルを作業ディレクトリにコピー
 COPY backend/stock_scraping_service/main.py .
 COPY backend/stock_scraping_service/requirements.txt .
