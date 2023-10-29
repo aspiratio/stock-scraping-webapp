@@ -24,8 +24,8 @@
 ## ビルド方法
 
 実行環境：M1 Mac
-backend ディレクトリで下記コマンドを実行
+ルートディレクトリで下記コマンドを実行
 
 ```sh
-docker build --platform linux/amd64 -t stock_scraping_service -f stock_scraping_service/Dockerfile .
+docker build --platform linux/amd64 -t stock_scraping_service -f backend/stock_scraping_service/Dockerfile .
 ```
