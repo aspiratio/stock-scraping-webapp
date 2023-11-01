@@ -25,12 +25,7 @@ WORKDIR /app/stock_scraping_service
 # 必要なファイルを作業ディレクトリにコピー
 COPY backend/stock_scraping_service/main.py .
 COPY backend/stock_scraping_service/requirements.txt .
-COPY backend/utils ..
-
-RUN ls ../
-RUN ls ../utils
-# COPY sa.json .
-# COPY .env .
+COPY backend/utils ../utils
 
 RUN pip install -r requirements.txt
 
