@@ -1,9 +1,6 @@
 # ルートディレクトリでビルドコマンドを実行する
 FROM python:3.11-slim
 
-# Cloud Runでコンテナがリッスンするポートを設定
-ENV PORT 8080
-
 # aptパッケージマネージャが対話的なモードを使用しないように設定する
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -29,6 +26,9 @@ WORKDIR /app/stock_scraping_service
 COPY backend/stock_scraping_service/main.py .
 COPY backend/stock_scraping_service/requirements.txt .
 COPY backend/utils ..
+
+RUN ls ../
+RUN ls ../utils
 # COPY sa.json .
 # COPY .env .
 
