@@ -34,4 +34,4 @@ COPY backend/utils /app/utils
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "/bin/sh", "/app/stock_scraping_service/main.py" ]
+ENTRYPOINT [ "python", "/app/stock_scraping_service/main.py" ]
