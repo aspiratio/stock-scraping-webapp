@@ -63,9 +63,9 @@ def get_own_stock_df(driver):
     print("ポートフォリオページを読み込み開始")
 
     # ポートフォリオ画面が読み込まれるのを待つ
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "stockInfo"))
-    )
+    # WebDriverWait(driver, 10).until(
+    #     EC.presence_of_element_located((By.CLASS_NAME, "stockInfo"))
+    # )
 
     # デバッグ用：HTMLを整形してログに出力
     print("ポートフォリオページを読み込みました")
