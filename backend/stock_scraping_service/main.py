@@ -48,6 +48,9 @@ def get_own_stock_df(driver):
     username.clear()
     password.clear()
 
+    print(config.SBI_USERNAME)
+    print(config.SBI_PASSWORD)
+
     # テキストボックスに値を入力する
     username.send_keys(config.SBI_USERNAME)
     password.send_keys(config.SBI_PASSWORD)
