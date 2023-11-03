@@ -64,6 +64,9 @@ def get_own_stock_df(driver):
         EC.presence_of_element_located((By.CLASS_NAME, "stockInfo"))
     )
 
+    # デバッグ用：HTMLを整形してログに出力
+    print("ポートフォリオページを読み込みました")
+
     # "もっと見る"ボタンが表示されなくなるまでクリックする
     while True:
         button_element = driver.find_elements(By.CLASS_NAME, "more")
@@ -186,6 +189,6 @@ if __name__ == "__main__":
 
         print("DBの更新が完了しました")
     except Exception as e:
-        print(str(e))
+        print("An error occurred:", str(e))
     finally:
         driver.quit()
