@@ -68,6 +68,9 @@ def get_own_stock_df(driver):
     html = driver.page_source.encode("utf-8")
     parsed_html = BeautifulSoup(html, "html.parser")
 
+    # デバッグ用：HTMLを整形してログに出力
+    print(parsed_html.prettify())
+
     # 保有銘柄の証券コード、銘柄名をそれぞれSeriesにする
 
     # 証券コード
