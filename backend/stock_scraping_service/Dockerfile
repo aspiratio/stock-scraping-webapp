@@ -20,7 +20,7 @@ RUN wget -q --no-check-certificate https://dl.google.com/linux/direct/google-chr
 
 # Chrome Driverをインストール
 RUN CHROMEDRIVER_VERSION=`curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE` \
-  && curl -sS -o /tmp/chromedriver_linux64.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip \
+  && curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip \
 	&& unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip
 
 WORKDIR /app/stock_scraping_service
