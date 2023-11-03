@@ -20,7 +20,7 @@ if secret_key_json is None:
 else:
     sbi_username = json.loads(secret_key_json)["SBI_USERNAME"]
     sbi_password = json.loads(secret_key_json)["SBI_PASSWORD"]
-    sbi_password = json.loads(secret_key_json)["SPREADSHEET_KEY"]
+    spreadsheet_key = json.loads(secret_key_json)["SPREADSHEET_KEY"]
 
 
 SBI_USERNAME = sbi_username
