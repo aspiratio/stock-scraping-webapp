@@ -5,6 +5,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
@@ -34,8 +36,10 @@ def get_own_stock_df(driver):
     driver.get(url_login)
     time.sleep(3)  # ページに遷移する前に次の処理が実行されないようにするため
 
-    # ログインフォームの要素を取得する
-    username = driver.find_element(By.NAME, "username")
+    # ログインフォームが読み込まれるのを待ってから要素を取得する
+    username = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.NAME, "username"))
+    )
     password = driver.find_element(By.NAME, "password")
     login_btn = driver.find_element(By.ID, "neo-login-btn")
 
@@ -54,7 +58,11 @@ def get_own_stock_df(driver):
     # SBIネオモバイルのポートフォリオ
     url_portfolio = "https://trade.sbineomobile.co.jp/account/portfolio"
     driver.get(url_portfolio)
-    time.sleep(3)
+
+    # ポートフォリオ画面が読み込まれるのを待つ
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "stockInfo"))
+    )
 
     # "もっと見る"ボタンが表示されなくなるまでクリックする
     while True:
@@ -62,7 +70,7 @@ def get_own_stock_df(driver):
         if len(button_element) == 0:
             break
         button_element[0].click()
-        time.sleep(1)
+        time.sleep(3)
 
     # ページのhtmlを取得してパースする
     html = driver.page_source.encode("utf-8")
