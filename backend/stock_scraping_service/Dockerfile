@@ -19,8 +19,8 @@ RUN wget -q --no-check-certificate https://dl.google.com/linux/direct/google-chr
   && apt update && apt install -y ./google-chrome-stable_current_amd64.deb
 
 # Chrome Driverをインストール
-RUN CHROMEDRIVER_VERSION=`curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE` \
-  && curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip \
+RUN CHROMEDRIVER_VERSION=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE) \
+  && curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
 	&& unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip
 
 WORKDIR /app/stock_scraping_service
