@@ -173,6 +173,7 @@ if __name__ == "__main__":
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）
     chrome_options.add_argument("--headless")  # ヘッドレスモードを有効にする
+    chrome_options.add_argument("--disable-gpu")  # GPUを無効にする
     # ドライバーの起動
     driver = webdriver.Chrome(
         service=ChromeService(ChromeDriverManager().install()), options=chrome_options
@@ -190,5 +191,8 @@ if __name__ == "__main__":
         print("DBの更新が完了しました")
     except Exception as e:
         print("An error occurred:", str(e))
+        import traceback
+
+        traceback.print_exc()
     finally:
         driver.quit()
