@@ -37,9 +37,10 @@ def get_own_stock_df(driver):
     time.sleep(3)  # ページに遷移する前に次の処理が実行されないようにするため
 
     # ログインフォームが読み込まれるのを待ってから要素を取得する
-    username = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "username"))
-    )
+    # username = WebDriverWait(driver, 10).until(
+    #     EC.presence_of_element_located((By.NAME, "username"))
+    # )
+    username = driver.find_element(By.NAME, "username")
     password = driver.find_element(By.NAME, "password")
     login_btn = driver.find_element(By.ID, "neo-login-btn")
 
@@ -58,6 +59,8 @@ def get_own_stock_df(driver):
     # SBIネオモバイルのポートフォリオ
     url_portfolio = "https://trade.sbineomobile.co.jp/account/portfolio"
     driver.get(url_portfolio)
+
+    print("ポートフォリオページを読み込み開始")
 
     # ポートフォリオ画面が読み込まれるのを待つ
     WebDriverWait(driver, 10).until(
