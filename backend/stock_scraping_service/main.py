@@ -54,7 +54,7 @@ def get_own_stock_df(driver):
 
     # ログインボタンをクリックする
     login_btn.click()
-    time.sleep(1)
+    time.sleep(5)
 
     # SBIネオモバイルのポートフォリオ
     url_portfolio = "https://trade.sbineomobile.co.jp/account/portfolio"
