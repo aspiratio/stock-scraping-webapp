@@ -20,8 +20,14 @@ RUN wget -q --no-check-certificate https://dl.google.com/linux/direct/google-chr
 
 # Chrome Driverをインストール
 RUN CHROMEDRIVER_VERSION=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE) \
+  && echo "Chrome Driver Version: $CHROMEDRIVER_VERSION" \
   && curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
-	&& unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip
+  && echo "Downloaded Chrome Driver ZIP" \
+  && ls -al /tmp \
+  && unzip -d /usr/local/bin/ /tmp/chromedriver_linux64.zip \
+  && echo "Unzipped Chrome Driver to /usr/local/bin/" \
+  && ls -al /usr/local/bin/
+
 
 WORKDIR /app/stock_scraping_service
 
