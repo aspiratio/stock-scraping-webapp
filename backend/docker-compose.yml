@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  stock_scraping_api:
+    build:
+      context: .
+      dockerfile: Dockerfile # Dockerfileのパス
+    image: stock_scraping_api_image # イメージ名を指定
+    container_name: stock_scraping_api_container # コンテナ名
+    ports:
+      - "8080:8000" # ホストの8080ポートをコンテナの8000ポートにマッピング
+    volumes:
+      - ${MY_APP_PATH}/app:/app # ホストのディレクトリをコンテナにマウント

@@ -4,9 +4,6 @@ FROM python:3.11-slim
 # aptパッケージマネージャが対話的なモードを使用しないように設定する
 ENV DEBIAN_FRONTEND noninteractive
 
-# Pythonで上階層を参照できるように親ディレクトリを環境変数に設定する
-ENV PYTHONPATH "/app/:$PYTHONPATH"
-
 # タイムゾーンをAsia/Tokyoにする
 RUN cp -a /etc/localtime /etc/localtime.origin && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
