@@ -22,13 +22,6 @@ RUN CHROMEDRIVER_VERSION=$(curl -sS https://googlechromelabs.github.io/chrome-fo
   && mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/ \
   && rm -rf /tmp/chromedriver_linux64.zip /tmp/chromedriver-linux64
 
-WORKDIR /app/stock_scraping_service
+# RUN pip install -r /my_app/requirements.txt
 
-# 必要なファイルを作業ディレクトリにコピー
-COPY backend/stock_scraping_service/main.py .
-COPY backend/stock_scraping_service/requirements.txt .
-COPY backend/utils /app/utils
-
-RUN pip install -r requirements.txt
-
-ENTRYPOINT [ "python", "/app/stock_scraping_service/main.py" ]
+# ENTRYPOINT [ "python", "/my_app/stock_scraping_service/stock_scraping_service.py" ]
