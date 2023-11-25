@@ -1,1 +1,0 @@
-print("exe: main.py")
