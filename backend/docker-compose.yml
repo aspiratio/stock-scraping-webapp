@@ -8,11 +8,10 @@ services:
     image: stock_scraping_api_image # イメージ名を指定
     platform: linux/x86_64
     container_name: stock_scraping_api_container # コンテナ名
-    environment:
+    environment: # Cloud Run上で動かすときに不要な環境変数はここで定義する
       GOOGLE_APPLICATION_CREDENTIALS: /app/sa.json
-      PYTHONPATH: /app
+      ENVIRONMENT: local
     ports:
       - "8000:8000" # ホストの8080ポートをコンテナの8000ポートにマッピング
     volumes:
       - ./:/app # ホストのディレクトリをコンテナにマウント
-    command: sh -c "cd app && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"

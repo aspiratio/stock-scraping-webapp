@@ -22,7 +22,13 @@ RUN CHROMEDRIVER_VERSION=$(curl -sS https://googlechromelabs.github.io/chrome-fo
   && mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/ \
   && rm -rf /tmp/chromedriver_linux64.zip /tmp/chromedriver-linux64
 
+ENV PYTHONPATH=/app
+
 WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+
+COPY start.sh .
+RUN chmod +x start.sh
+ENTRYPOINT ["/app/start.sh"]
