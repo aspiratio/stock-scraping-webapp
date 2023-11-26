@@ -24,11 +24,11 @@ RUN CHROMEDRIVER_VERSION=$(curl -sS https://googlechromelabs.github.io/chrome-fo
 
 ENV PYTHONPATH=/app
 
+COPY ./ /app/
+
 WORKDIR /app
 
-COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY start.sh .
 RUN chmod +x start.sh
 ENTRYPOINT ["/app/start.sh"]
