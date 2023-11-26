@@ -8,6 +8,9 @@ services:
     image: stock_scraping_api_image # イメージ名を指定
     platform: linux/x86_64
     container_name: stock_scraping_api_container # コンテナ名
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/sa.json
+      PYTHONPATH: /app
     ports:
       - "8000:8000" # ホストの8080ポートをコンテナの8000ポートにマッピング
     volumes:

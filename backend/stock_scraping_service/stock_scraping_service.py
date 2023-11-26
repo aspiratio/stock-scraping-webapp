@@ -28,7 +28,7 @@ def extract_number(text):
     return number
 
 
-def get_own_stock_df(driver):
+def _get_own_stock_df(driver):
     print("SBI scraping started...")
 
     # SBIネオモバイルのログインページへアクセス
@@ -111,6 +111,9 @@ def get_own_stock_df(driver):
 
     ser_stock_name = pd.Series(stock_name_list)
 
+    # 　デバッグ用
+    print(parsed_html.find_all("table"))
+
     # 全銘柄の現在値〜預り区分をデータフレームのリストにする
     table = parsed_html.find_all("table")
     list_df_tables = pd.read_html(str(table))
@@ -175,12 +178,14 @@ def get_own_stock_df(driver):
     return df_own_stock.to_dict(orient="records")
 
 
-if __name__ == "__main__":
+def stock_scraping_service():
+    print("処理スタート")
     # Chrome オプションの設定
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）
     chrome_options.add_argument("--headless")  # ヘッドレスモードを有効にする
     chrome_options.add_argument("--disable-gpu")  # GPUを無効にする
+    chrome_options.add_argument("--disable-dev-shm-usage")  # <=これを追加
     # ドライバーの起動
     driver = webdriver.Chrome(
         service=ChromeService(ChromeDriverManager().install()), options=chrome_options
@@ -189,7 +194,8 @@ if __name__ == "__main__":
     try:
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
-        dict_own_stock = get_own_stock_df(driver)
+        print("ドライバー起動")
+        dict_own_stock = _get_own_stock_df(driver)
 
         # DBの保有株情報を削除して入れ直す
         delete_all_documents(collection_name)
