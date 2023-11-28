@@ -63,16 +63,11 @@ def _get_own_stock_df(driver):
     url_portfolio = "https://trade.sbineomobile.co.jp/account/portfolio"
     driver.get(url_portfolio)
 
-    print("ポートフォリオページを読み込み開始")
-
     # ポートフォリオ画面が読み込まれるのを待つ
     # WebDriverWait(driver, 10).until(
     #     EC.presence_of_element_located((By.CLASS_NAME, "stockInfo"))
     # )
     time.sleep(5)
-
-    # デバッグ用：HTMLを整形してログに出力
-    print("ポートフォリオページを読み込みました")
 
     # "もっと見る"ボタンが表示されなくなるまでクリックする
     while True:
@@ -85,9 +80,6 @@ def _get_own_stock_df(driver):
     # ページのhtmlを取得してパースする
     html = driver.page_source.encode("utf-8")
     parsed_html = BeautifulSoup(html, "html.parser")
-
-    # デバッグ用：HTMLを整形してログに出力
-    print(parsed_html.prettify())
 
     # 保有銘柄の証券コード、銘柄名をそれぞれSeriesにする
 
@@ -110,9 +102,6 @@ def _get_own_stock_df(driver):
         stock_name_list.append(stock_name)
 
     ser_stock_name = pd.Series(stock_name_list)
-
-    # 　デバッグ用
-    print(parsed_html.find_all("table"))
 
     # 全銘柄の現在値〜預り区分をデータフレームのリストにする
     table = parsed_html.find_all("table")
@@ -173,13 +162,11 @@ def _get_own_stock_df(driver):
         lambda x: int(extract_number(x))
     )
 
-    print("SBI scraping finished")
-
     return df_own_stock.to_dict(orient="records")
 
 
-def stock_scraping_service():
-    print("処理スタート")
+def stock_scraping():
+    print("stock_scrapingを始めます")
     # Chrome オプションの設定
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）
@@ -190,11 +177,11 @@ def stock_scraping_service():
     driver = webdriver.Chrome(
         service=ChromeService(ChromeDriverManager().install()), options=chrome_options
     )
+    print("ドライバーを起動しました")
 
     try:
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
-        print("ドライバー起動")
         dict_own_stock = _get_own_stock_df(driver)
 
         # DBの保有株情報を削除して入れ直す
@@ -203,7 +190,7 @@ def stock_scraping_service():
 
         print("DBの更新が完了しました")
     except Exception as e:
-        print("An error occurred:", str(e))
+        print("stock_scrapingでエラーが発生しました:", str(e))
         import traceback
 
         traceback.print_exc()

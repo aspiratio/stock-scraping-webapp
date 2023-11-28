@@ -1,17 +1,27 @@
 from fastapi import FastAPI
 
 from stock_scraping_service import stock_scraping_service
+from dividend_scraping_service import dividend_scraping_service
+from spreadsheet_update_service import spreadsheet_update_service
 
 app = FastAPI()  # FastAPIのインスタンス化
 
 
 # 基本（GET）
-@app.get("/")  # インスタンス化したappにHTTPメソッド（オペレーションと呼ぶ）のGETで"/"のURLにアクセスがあったら下の関数を実行するという意味
-async def root():
+@app.get(
+    "/update_stock_info"
+)  # インスタンス化したappにHTTPメソッド（オペレーションと呼ぶ）のGETで"/"のURLにアクセスがあったら下の関数を実行するという意味
+async def update_stock_info(
+    stock: bool = True, dividend: bool = True, spreadsheet: bool = True
+):
     print("リクエストを受け付けました")
     try:
-        stock_scraping_service.stock_scraping_service()
-        return {"message": "実行中です"}
+        if stock:
+            await stock_scraping_service.stock_scraping()
+        if dividend:
+            await dividend_scraping_service.dividend_scraping()
+        if spreadsheet:
+            await spreadsheet_update_service.spreadsheet_update()
+        return {"message": "保有株情報を更新中です"}
     except Exception as e:
-        print("An error occurred:", str(e))
         return {"message": "エラーです"}
