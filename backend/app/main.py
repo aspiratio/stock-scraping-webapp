@@ -34,7 +34,7 @@ async def update_stock_info(
     stock: bool = True, dividend: bool = True, spreadsheet: bool = True
 ):
     try:
-        asyncio.create_task(async_update_stock_info(stock, dividend, spreadsheet))
+        asyncio.ensure_future(async_update_stock_info(stock, dividend, spreadsheet))
         return {"message": "保有株情報を更新中です"}
     except Exception as e:
         print("error_message: ", e)
