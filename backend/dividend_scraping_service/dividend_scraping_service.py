@@ -49,8 +49,9 @@ def _process_stock(stock_code):
 def dividend_scraping():
     try:
         results = {}
-        collection_name = "stock_stock"
-        stock_codes = get_all_document_ids(collection_name)
+        input_collection_name = "own_stock"
+        output_collection_name = "stock_info"
+        stock_codes = get_all_document_ids(input_collection_name)
         with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
             futures = [
                 executor.submit(_process_stock, stock_code)
@@ -63,7 +64,7 @@ def dividend_scraping():
 
         # 結果をDBに登録する
         for stock_code, dividend in results:
-            set_documents(collection_name, results)
+            set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
         print("append_dividendでエラーが発生しました: ", str(e))
