@@ -15,21 +15,20 @@ app = FastAPI()  # FastAPIのインスタンス化
 async def update_stock_info(
     stock: bool = True, dividend: bool = True, spreadsheet: bool = True
 ):
-    print("リクエストを受け付けました")
-    if stock or dividend:
-        print("ドライバーを起動します")
-        driver = boot_driver()
-
     try:
         if stock:
+            print("stock_scraping: start")
             await stock_scraping_service.stock_scraping(driver)
+            print("stock_scraping: done")
         if dividend:
+            print("dividend_scraping: start")
             await dividend_scraping_service.dividend_scraping(driver)
+            print("dividend_scraping: done")
         if spreadsheet:
+            print("spreadsheet_update: start")
             await spreadsheet_update_service.spreadsheet_update()
+            print("spreadsheet_update: done")
         return {"message": "保有株情報を更新中です"}
     except Exception as e:
+        print("error_message: ", e)
         return {"message": "エラーです"}
-    finally:
-        if stock or dividend:
-            driver.quit()

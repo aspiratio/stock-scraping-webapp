@@ -1,13 +1,11 @@
 import pandas as pd
 import time
+import traceback
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
+from utils.chrome_driver import boot_driver
 from utils.firestore_utils import (
     set_documents,
     delete_all_documents,
@@ -41,9 +39,6 @@ def _get_own_stock_df(driver):
     # 念のためテキストボックスの中身を空にする
     username.clear()
     password.clear()
-
-    print(config.SBI_USERNAME)
-    print(config.SBI_PASSWORD)
 
     # テキストボックスに値を入力する
     username.send_keys(config.SBI_USERNAME)
@@ -155,9 +150,9 @@ def _get_own_stock_df(driver):
     return df_own_stock.to_dict(orient="records")
 
 
-def stock_scraping(driver):
-    print("stock_scrapingを始めます")
+def stock_scraping():
     try:
+        driver = boot_driver()
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
         dict_own_stock = _get_own_stock_df(driver)
@@ -165,10 +160,9 @@ def stock_scraping(driver):
         # DBの保有株情報を削除して入れ直す
         delete_all_documents(collection_name)
         set_documents(collection_name, dict_own_stock)
-
-        print("DBの更新が完了しました")
     except Exception as e:
         print("stock_scrapingでエラーが発生しました:", str(e))
-        import traceback
-
         traceback.print_exc()
+    finally:
+        if driver is not None:
+            driver.quit()
