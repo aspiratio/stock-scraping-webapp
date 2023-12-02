@@ -18,11 +18,11 @@ async def update_stock_info(
     try:
         if stock:
             print("stock_scraping: start")
-            await stock_scraping_service.stock_scraping(driver)
+            await stock_scraping_service.stock_scraping()
             print("stock_scraping: done")
         if dividend:
             print("dividend_scraping: start")
-            await dividend_scraping_service.dividend_scraping(driver)
+            await dividend_scraping_service.dividend_scraping()
             print("dividend_scraping: done")
         if spreadsheet:
             print("spreadsheet_update: start")
