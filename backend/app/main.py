@@ -14,14 +14,17 @@ async def async_update_stock_info(stock: bool, dividend: bool, spreadsheet: bool
     if stock:
         print("stock_scraping: start")
         tasks.append(stock_scraping_service.stock_scraping())
+        print("stock_scraping: done")
 
     if dividend:
         print("dividend_scraping: start")
         tasks.append(dividend_scraping_service.dividend_scraping())
+        print("dividend_scraping: done")
 
     if spreadsheet:
         print("spreadsheet_update: start")
         tasks.append(spreadsheet_update_service.spreadsheet_update())
+        print("spreadsheet_update: done")
 
     await asyncio.gather(*tasks)
 
