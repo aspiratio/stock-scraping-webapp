@@ -12,21 +12,21 @@ app = FastAPI()  # FastAPIのインスタンス化
 @app.get(
     "/update_stock_info"
 )  # インスタンス化したappにHTTPメソッド（オペレーションと呼ぶ）のGETで"/"のURLにアクセスがあったら下の関数を実行するという意味
-async def update_stock_info(
+def update_stock_info(
     stock: bool = True, dividend: bool = True, spreadsheet: bool = True
 ):
     try:
         if stock:
             print("stock_scraping: start")
-            await stock_scraping_service.stock_scraping()
+            stock_scraping_service.stock_scraping()
             print("stock_scraping: done")
         if dividend:
             print("dividend_scraping: start")
-            await dividend_scraping_service.dividend_scraping()
+            dividend_scraping_service.dividend_scraping()
             print("dividend_scraping: done")
         if spreadsheet:
             print("spreadsheet_update: start")
-            await spreadsheet_update_service.spreadsheet_update()
+            spreadsheet_update_service.spreadsheet_update()
             print("spreadsheet_update: done")
         return {"message": "保有株情報を更新中です"}
     except Exception as e:
