@@ -50,7 +50,7 @@ def dividend_scraping():
     try:
         results = {}
         collection_name = "stock_stock"
-        stock_codes = get_all_document_ids()
+        stock_codes = get_all_document_ids(collection_name)
         with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
             futures = [
                 executor.submit(_process_stock, stock_code)
