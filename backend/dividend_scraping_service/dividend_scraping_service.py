@@ -53,15 +53,18 @@ def dividend_scraping():
         output_collection_name = "stock_info"
         stock_codes = get_all_document_ids(input_collection_name)
         print("対象の企業コード: ", stock_codes)
-        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
-            futures = [
-                executor.submit(_process_stock, stock_code)
-                for stock_code in stock_codes
-            ]
 
-            for future in concurrent.futures.as_completed(futures):
-                stock_code, dividend = future.result()
-                results[stock_code] = dividend
+        stock_code, dividend = _process_stock(stock_codes[0])
+        results[stock_code] = dividend
+        # with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+        #     futures = [
+        #         executor.submit(_process_stock, stock_code)
+        #         for stock_code in stock_codes
+        #     ]
+
+        #     for future in concurrent.futures.as_completed(futures):
+        #         stock_code, dividend = future.result()
+        #         results[stock_code] = dividend
 
         # 結果をDBに登録する
         for stock_code, dividend in results:
