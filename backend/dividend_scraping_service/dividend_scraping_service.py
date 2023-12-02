@@ -46,7 +46,7 @@ def _process_stock(stock_code):
         driver.quit()
 
 
-def append_dividend(df_own_stock):
+def dividend_scraping():
     try:
         results = {}
         collection_name = "stock_stock"
