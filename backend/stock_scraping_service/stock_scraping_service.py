@@ -160,10 +160,10 @@ def stock_scraping():
         # DBの保有株情報を削除して入れ直す
         delete_all_documents(collection_name)
         set_documents(collection_name, dict_own_stock)
-        return {"status": "200"}
     except Exception as e:
         print("stock_scrapingでエラーが発生しました:", str(e))
         traceback.print_exc()
     finally:
         if driver is not None:
             driver.quit()
+        return "done"
