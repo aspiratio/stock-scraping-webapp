@@ -64,6 +64,7 @@ def dividend_scraping():
         # 結果をDBに登録する
         for stock_code, dividend in results:
             set_documents(collection_name, results)
+        return {"status": "200"}
     except Exception as e:
         print("append_dividendでエラーが発生しました: ", str(e))
         traceback.print_exc()
