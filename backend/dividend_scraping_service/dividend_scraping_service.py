@@ -53,15 +53,20 @@ async def dividend_scraping():
         output_collection_name = "stock_info"
         stock_codes = get_all_document_ids(input_collection_name)
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
-            futures = [
-                executor.submit(_process_stock, stock_code)
-                for stock_code in stock_codes
-            ]
+        print(stock_codes)
 
-            for future in concurrent.futures.as_completed(futures):
-                stock_code, dividend = future.result()
-                results.append({"ticker": stock_code, "dividend_yen": dividend})
+        stock_code, dividend = _process_stock(stock_codes[0])
+        results.append({"ticker": stock_code, "dividend": dividend})
+
+        # with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+        #     futures = [
+        #         executor.submit(_process_stock, stock_code)
+        #         for stock_code in stock_codes
+        #     ]
+
+        #     for future in concurrent.futures.as_completed(futures):
+        #         stock_code, dividend = future.result()
+        #         results.append({"ticker": stock_code, "dividend_yen": dividend})
 
         # 結果をDBに登録する
         set_documents(output_collection_name, results)
