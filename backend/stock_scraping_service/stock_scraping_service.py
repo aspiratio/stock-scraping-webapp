@@ -150,16 +150,16 @@ def _get_own_stock_df(driver):
     return df_own_stock.to_dict(orient="records")
 
 
-def stock_scraping():
+async def stock_scraping():
     try:
         driver = boot_driver()
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
-        dict_own_stock = _get_own_stock_df(driver)
+        list_own_stock = _get_own_stock_df(driver)
 
         # DBの保有株情報を削除して入れ直す
         delete_all_documents(collection_name)
-        set_documents(collection_name, dict_own_stock)
+        set_documents(collection_name, list_own_stock)
     except Exception as e:
         print("stock_scrapingでエラーが発生しました:", str(e))
         traceback.print_exc()

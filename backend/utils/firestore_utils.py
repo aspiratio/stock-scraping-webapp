@@ -28,7 +28,7 @@ def get_all_document_ids(collection_name: str):
         raise
 
 
-def set_documents(collection_name: str, data: dict):
+def set_documents(collection_name: str, data: list):
     set_tickers = []
     try:
         for value in data:
