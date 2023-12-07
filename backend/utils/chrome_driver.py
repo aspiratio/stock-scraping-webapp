@@ -11,8 +11,14 @@ def boot_driver():
     chrome_options.add_argument("--headless")  # ヘッドレスモードを有効にする
     chrome_options.add_argument("--disable-gpu")  # GPUを無効にする
     chrome_options.add_argument("--disable-dev-shm-usage")
+
+    # Docker環境専用の記述
+    chrome_driver_path = "/usr/local/bin/chromedriver"
+
     # ドライバーの起動
     driver = webdriver.Chrome(
-        service=ChromeService(ChromeDriverManager().install()), options=chrome_options
+        service=ChromeService(ChromeDriverManager().install()),
+        options=chrome_options,
+        executable_path=chrome_driver_path,
     )
     return driver
