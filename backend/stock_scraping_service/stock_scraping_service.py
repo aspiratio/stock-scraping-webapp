@@ -151,8 +151,8 @@ def _get_own_stock_df(driver):
 
 
 async def stock_scraping():
+    driver = boot_driver()
     try:
-        driver = boot_driver()
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
         list_own_stock = _get_own_stock_df(driver)

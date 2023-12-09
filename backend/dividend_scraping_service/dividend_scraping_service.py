@@ -43,9 +43,8 @@ def _process_stock(driver, ticker):
 
 
 async def dividend_scraping():
+    driver = boot_driver()
     try:
-        driver = boot_driver()
-
         results = []
         input_collection_name = "own_stock"
         output_collection_name = "stock_info"
