@@ -3,6 +3,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
+from utils import logger
+
 
 def boot_driver():
     # Chrome オプションの設定
@@ -21,4 +23,5 @@ def boot_driver():
         options=chrome_options,
         executable_path=chrome_driver_path,
     )
+    logger.info("driverを起動しました")
     return driver

@@ -10,8 +10,8 @@ from utils.firestore_utils import (
     set_documents,
     delete_all_documents,
 )
-
 from utils import config
+from utils import logger
 
 import re
 
@@ -25,7 +25,7 @@ def extract_number(text):
 
 
 def _get_own_stock_df(driver):
-    print("SBI scraping started...")
+    logger.info("SBI scraping started...")
 
     # SBIネオモバイルのログインページへアクセス
     url_login = "https://trade.sbineomobile.co.jp/login"
@@ -161,7 +161,7 @@ async def stock_scraping():
         delete_all_documents(collection_name)
         set_documents(collection_name, list_own_stock)
     except Exception as e:
-        print("stock_scrapingでエラーが発生しました:", str(e))
+        logger.error("stock_scrapingでエラーが発生しました:", str(e))
         traceback.print_exc()
     finally:
         if driver is not None:
