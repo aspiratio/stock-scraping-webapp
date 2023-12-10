@@ -3,7 +3,9 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-from utils import logger
+from utils.logger import Logger
+
+logger = Logger()
 
 
 def boot_driver():
@@ -23,5 +25,6 @@ def boot_driver():
         options=chrome_options,
         executable_path=chrome_driver_path,
     )
+    print("driverを起動しました")
     logger.info("driverを起動しました")
     return driver

@@ -7,10 +7,13 @@ from selenium.common.exceptions import TimeoutException
 
 from utils.chrome_driver import boot_driver
 from utils.firestore_utils import get_all_document_ids, set_documents
-from utils import logger
+from utils.logger import Logger
+
+logger = Logger()
 
 
 def _process_stock(driver, ticker):
+    print(f"{ticker} start")
     logger.info(f"{ticker} start")
     # 配当ページへアクセス
     url_dividend = f"https://minkabu.jp/stock/{ticker}/dividend"
@@ -32,6 +35,7 @@ def _process_stock(driver, ticker):
         )
     except TimeoutException:
         # 予想配当金がないものは0円として処理する
+        print(f"{ticker} skipped")
         logger.info(f"{ticker} skipped")
         return 0
 
@@ -39,6 +43,7 @@ def _process_stock(driver, ticker):
     dividend_integer = dividend_elements[0].text.strip()
     dividend_decimal = dividend_decimal_elements[0].text.strip()
     dividend = float(dividend_integer + dividend_decimal)
+    print(f"{ticker} finish")
     logger.info(f"{ticker} finish")
     return dividend
 
@@ -59,7 +64,7 @@ async def dividend_scraping():
         set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
+        print("append_dividendでエラーが発生しました: ", str(e))
         logger.error("append_dividendでエラーが発生しました: ", str(e))
-        traceback.print_exc()
     finally:
         driver.quit()
