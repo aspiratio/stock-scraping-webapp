@@ -11,6 +11,22 @@ db = firestore.Client()
 root_doc = db.collection(root_collection_name).document(root_doc_id)
 
 
+def get_all_document_values(collection_name: str):
+    try:
+        results = []
+        # コレクションを取得
+        collection = root_doc.collection(collection_name)
+
+        # すべてのドキュメントを取得
+        docs = collection.stream()
+        for doc in docs:
+            results.append(doc.to_dict())
+
+        return results
+    except Exception:
+        raise
+
+
 def get_all_document_ids(collection_name: str):
     try:
         # コレクションを取得
@@ -45,6 +61,23 @@ def set_documents(collection_name: str, data: list):
 
         print(f"{collection_name}にドキュメントの登録が成功しました")
         return set_tickers
+
+    except Exception:
+        raise
+
+
+def update_documents(collection_name: str, data: list):
+    try:
+        for value in data:
+            # ドキュメントを指定
+            doc_ref = root_doc.collection(collection_name).document(value["ticker"])
+
+            # last_updated_timeフィールドに現在のタイムスタンプを追加
+            value["last_updated_time"] = firestore.SERVER_TIMESTAMP
+
+            # 値を更新
+            doc_ref.update(value)
+        print(f"{collection_name}のドキュメント更新が成功しました")
 
     except Exception:
         raise
