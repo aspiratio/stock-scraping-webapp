@@ -21,11 +21,29 @@
   - スプレッドシートの更新
     - DB に登録された株情報と配当金情報を元に、スプレッドシートを更新する
 
-## ビルド方法
+## 開発用のメモ
 
-実行環境：M1 Mac
-ルートディレクトリで下記コマンドを実行
+### 実行環境
+
+- M1 Mac
+- Docker Desktop の「Use Rosetta for x86/amd64 emulation on Apple Silicon」をオン
+
+### ビルド
+
+backend ディレクトリで下記コマンドを実行
 
 ```sh
-docker build --platform linux/amd64 -t stock_scraping_service -f backend/stock_scraping_service/Dockerfile .
+docker compose build
+```
+
+### コンテナ起動
+
+```sh
+docker compose up -d
+```
+
+### コンテナ内のターミナルに接続
+
+```sh
+docker exec -it stock_scraping_api_container /bin/bash
 ```
