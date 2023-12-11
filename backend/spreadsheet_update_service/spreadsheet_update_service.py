@@ -1,11 +1,37 @@
+import pandas as pd
 from utils.firestore_utils import get_all_document_values
 
 
 async def spreadsheet_update():
-    data = get_all_document_values("stock_info")
-    print("data: ", data)
-    # # スプレッドシートに書き込めるようにリスト形式に変換する
-    # list_own_stock = df_own_stock.values.tolist()
+    # それぞれDBから取得したリストをデータフレームに変換する
+    own_stock_list = get_all_document_values("own_stock")
+    own_stock_df = pd.DataFrame(own_stock_list)
+
+    stock_info_list = get_all_document_values("stock_info")
+    stock_info_df = pd.DataFrame(stock_info_list)
+
+    # 企業コードでJOINする
+    stock_merged_df = pd.merge(own_stock_df, stock_info_df, on="ticker", how="left")
+
+    # スプレッドシートの列の並び
+    columns_order = [
+        "ticker",
+        "market",
+        "name",
+        "industries",
+        "quantity",
+        "purchase_price",
+        "current_price",
+        "dividend_yen",
+    ]
+
+    # データフレームから必要な列だけ取り出し、かつ並び替える
+    stock_merged_df_selected = stock_merged_df.loc[:, columns_order][columns_order]
+
+    # スプレッドシートに書き込めるようにリスト形式に変換する
+    stock_list = stock_merged_df_selected.values.tolist()
+
+    print(stock_list)
 
     # # 2つのAPIを記述しないとリフレッシュトークンを3600秒毎に発行し続けなければならない
     # scope = [
