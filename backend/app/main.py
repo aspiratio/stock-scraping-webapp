@@ -14,6 +14,7 @@ logger = Logger()
 async def async_update_stock_info(
     stock: bool, dividend: bool, market: bool, spreadsheet: bool
 ):
+    print("開始")
     if stock:
         print("stock_scraping: start")
         logger.info("stock_scraping: start")
