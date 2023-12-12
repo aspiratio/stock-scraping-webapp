@@ -36,11 +36,14 @@ async def spreadsheet_update():
         # スプレッドシートに書き込めるようにリスト形式に変換する
         stock_list = stock_merged_df_selected.values.tolist()
 
+        # ローカルで動かす時だけキーファイルのパスを指定する必要がある
+        key_path = None
+        if config.SERVICE_ACCOUNT_KEY:
+            key_path = config.SERVICE_ACCOUNT_KEY
+
         # Cloud Runを実行しているサービスアカウントで対象のスプレッドシートにアクセスする
         # 事前にスプレッドシート側で共有設定（サービスアカウントのアドレスを許可）しておく
-        gc = gspread.service_account(
-            config.SERVICE_ACCOUNT_KEY
-        )  # Cloud Runなら変数にNULLが入る
+        gc = gspread.service_account(key_path)
         spreadsheet = gc.open_by_key(config.SPREADSHEET_KEY)
 
         # シート名を指定してシートを開く
