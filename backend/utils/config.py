@@ -18,11 +18,13 @@ if environment == "local":
     spreadsheet_key = os.getenv("SPREADSHEET_KEY")
 else:
     secret_key_json = os.getenv("ACCOUNT_INFO")
+    project_id = os.getenv("PROJECT_ID")
     sbi_username = json.loads(secret_key_json)["SBI_USERNAME"]
     sbi_password = json.loads(secret_key_json)["SBI_PASSWORD"]
     spreadsheet_key = json.loads(secret_key_json)["SPREADSHEET_KEY"]
 
 IS_LOCAL = environment == "local"
+PROJECT_ID = project_id
 SBI_USERNAME = sbi_username
 SBI_PASSWORD = sbi_password
 SPREADSHEET_KEY = spreadsheet_key
