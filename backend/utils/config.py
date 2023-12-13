@@ -6,23 +6,23 @@ from dotenv import load_dotenv, find_dotenv
 # ローカルの .env ファイルをロードする
 load_dotenv(find_dotenv())
 
-# Cloud Run の環境変数を取得する
-# ローカルには ACCOUNT_INFO の環境変数はないため、None になる。その時だけローカルの環境変数を利用する
-secret_key_json = os.getenv("ACCOUNT_INFO")
+environment = os.getenv("ENVIRONMENT")
 sbi_username = ""
 sbi_password = ""
 spreadsheet_key = ""
 
-if secret_key_json is None:
+# ローカルならenvファイルから環境変数の値を取得する
+if environment == "local":
     sbi_username = os.getenv("SBI_USERNAME")
     sbi_password = os.getenv("SBI_PASSWORD")
     spreadsheet_key = os.getenv("SPREADSHEET_KEY")
 else:
+    secret_key_json = os.getenv("ACCOUNT_INFO")
     sbi_username = json.loads(secret_key_json)["SBI_USERNAME"]
     sbi_password = json.loads(secret_key_json)["SBI_PASSWORD"]
     spreadsheet_key = json.loads(secret_key_json)["SPREADSHEET_KEY"]
 
-
+IS_LOCAL = environment == "local"
 SBI_USERNAME = sbi_username
 SBI_PASSWORD = sbi_password
 SPREADSHEET_KEY = spreadsheet_key
