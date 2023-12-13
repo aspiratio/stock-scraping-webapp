@@ -15,7 +15,7 @@ def _create_gspread_client():
         secret_id = "466155598212"
         version_id = "1"
         client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+        name = f"projects/466155598212/secrets/sa-key-stock-scraping-webapp/versions/1"
 
         response = client.access_secret_version(name=name)
         key_data = response.payload.data.decode("UTF-8")
