@@ -13,8 +13,9 @@ def _create_gspread_client():
     else:
         secret_name = "sa-key-stock-scraping-webapp"
         project_id = config.PROJECT_ID
+        secret_version = 1
         client = secretmanager.SecretManagerServiceClient()
-        name = client.secret_version_path(project_id, secret_name, "latest")
+        name = client.secret_version_path(project_id, secret_name, secret_version)
         secret_version = client.latest_secret_version(name=name)
         key_data = secret_version.payload.data.decode("UTF-8")
         gspread_client = gspread.service_account_from_dict(key_data)
