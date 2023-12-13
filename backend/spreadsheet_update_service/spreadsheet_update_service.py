@@ -11,13 +11,14 @@ def _create_gspread_client():
     if config.IS_LOCAL:
         gspread_client = gspread.service_account(config.SERVICE_ACCOUNT_KEY)
     else:
-        secret_name = "sa-key-stock-scraping-webapp"
         project_id = config.PROJECT_ID
-        secret_version = 1
+        secret_id = "466155598212"
+        version_id = "1"
         client = secretmanager.SecretManagerServiceClient()
-        name = client.secret_version_path(project_id, secret_name, secret_version)
-        secret_version = client.latest_secret_version(name=name)
-        key_data = secret_version.payload.data.decode("UTF-8")
+        name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+
+        response = client.access_secret_version(request={"name": name})
+        key_data = response.payload.data.decode("UTF-8")
         gspread_client = gspread.service_account_from_dict(key_data)
     return gspread_client
 
