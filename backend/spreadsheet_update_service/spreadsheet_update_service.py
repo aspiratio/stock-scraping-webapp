@@ -17,7 +17,7 @@ def _create_gspread_client():
         client = secretmanager.SecretManagerServiceClient()
         name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
 
-        response = client.access_secret_version(request={"name": name})
+        response = client.access_secret_version(name=name)
         key_data = response.payload.data.decode("UTF-8")
         gspread_client = gspread.service_account_from_dict(key_data)
     return gspread_client
