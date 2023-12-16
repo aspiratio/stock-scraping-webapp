@@ -22,11 +22,6 @@ def _create_gspread_client():
         key_data = response.payload.data.decode("UTF-8")
         key_data = json.loads(key_data)
         gspread_client = gspread.service_account_from_dict(key_data)
-
-        # Cloud Run の環境で TLS 1.0 を有効にする
-        gspread_client.auth.credentials.ssl_ca_certs = (
-            "/etc/ssl/certs/ca-certificates.crt"
-        )
     return gspread_client
 
 
