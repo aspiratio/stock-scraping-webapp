@@ -1,6 +1,5 @@
 import pandas as pd
 import time
-import traceback
 
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
@@ -11,11 +10,8 @@ from utils.firestore_utils import (
     delete_all_documents,
 )
 from utils import config
-from utils.logger import Logger
 
 import re
-
-logger = Logger()
 
 
 def extract_number(text):
@@ -28,7 +24,6 @@ def extract_number(text):
 
 def _get_own_stock_df(driver):
     print("SBI scraping started...")
-    logger.info("SBI scraping started...")
 
     # SBIネオモバイルのログインページへアクセス
     url_login = "https://trade.sbineomobile.co.jp/login"
@@ -165,7 +160,6 @@ async def stock_scraping():
         set_documents(collection_name, list_own_stock)
     except Exception as e:
         print("stock_scrapingでエラーが発生しました", str(e))
-        logger.error("stock_scrapingでエラーが発生しました:", str(e))
     finally:
         if driver is not None:
             driver.quit()
