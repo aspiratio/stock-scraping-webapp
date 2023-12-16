@@ -1,5 +1,6 @@
 import pandas as pd
 import gspread
+import json
 from utils import config
 from utils.firestore_utils import get_all_document_values
 from google.cloud import secretmanager
@@ -18,8 +19,9 @@ def _create_gspread_client():
         name = f"projects/466155598212/secrets/sa-key-stock-scraping-webapp/versions/1"
 
         response = client.access_secret_version(name=name)
-        # key_data = response.payload.data.decode("UTF-8")
-        gspread_client = gspread.service_account_from_dict(response)
+        key_data = response.payload.data.decode("UTF-8")
+        key_data = json.loads(key_data)
+        gspread_client = gspread.service_account_from_dict(key_data)
     return gspread_client
 
 
