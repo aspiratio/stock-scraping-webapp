@@ -1,5 +1,6 @@
 import pandas as pd
 import gspread
+import google.auth
 import json
 from utils import config
 from utils.firestore_utils import get_all_document_values
@@ -12,17 +13,25 @@ def _create_gspread_client():
     if config.IS_LOCAL:
         gspread_client = gspread.service_account(config.SERVICE_ACCOUNT_KEY)
     else:
-        project_id = config.PROJECT_ID
-        secret_id = "466155598212"
-        version_id = "1"
-        client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/466155598212/secrets/sa-key-stock-scraping-webapp/versions/1"
+        # project_id = config.PROJECT_ID
+        # secret_id = "466155598212"
+        # version_id = "1"
+        # client = secretmanager.SecretManagerServiceClient()
+        # name = f"projects/466155598212/secrets/sa-key-stock-scraping-webapp/versions/1"
 
-        response = client.access_secret_version(name=name)
-        key_data = response.payload.data.decode("UTF-8")
-        key_data = json.loads(key_data)
-        print(key_data)
-        gspread_client = gspread.service_account_from_dict(key_data)
+        # response = client.access_secret_version(name=name)
+        # key_data = response.payload.data.decode("UTF-8")
+        # key_data = json.loads(key_data)
+        # print(key_data)
+        # gspread_client = gspread.service_account_from_dict(key_data)
+
+        scopes = [
+            "https://www.googleapis.com/auth/spreadsheets",
+            "https://www.googleapis.com/auth/drive",
+        ]
+
+        credentials, _ = google.auth.default(scopes=scopes)
+        gspread_client = gspread.authorize(credentials)
     return gspread_client
 
 
