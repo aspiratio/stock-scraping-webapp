@@ -69,8 +69,7 @@ async def spreadsheet_update():
     # Cloud Runを実行しているサービスアカウントで対象のスプレッドシートにアクセスする
     # 事前にスプレッドシート側で共有設定（サービスアカウントのアドレスを許可）しておく
     gspread_client = _create_gspread_client()
-    print(config.SPREADSHEET_KEY)
-    spreadsheet = gspread_client.open_by_key("xxxxxxxx")
+    spreadsheet = gspread_client.open_by_key(config.SPREADSHEET_KEY)
 
     # シート名を指定してシートを開く
     worksheet = spreadsheet.worksheet(config.SHEET_NAME)
