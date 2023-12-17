@@ -9,6 +9,7 @@ logger = Logger()
 
 
 def boot_driver():
+    print("driverを起動します")
     # Chrome オプションの設定
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）

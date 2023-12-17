@@ -149,7 +149,9 @@ def _get_own_stock_df(driver):
 
 
 async def stock_scraping():
+    print("boot_driverの実行")
     driver = boot_driver()
+    print("boot_driverの完了")
     try:
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
