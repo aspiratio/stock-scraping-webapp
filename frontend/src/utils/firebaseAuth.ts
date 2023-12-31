@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { signInWithEmailAndPassword } from "firebase/auth"
 
 const firebaseApp = initializeApp({
@@ -23,4 +23,16 @@ export const loginWithEmailAndPassword = async (
   } catch {
     throw Error("メールアドレスかパスワードが間違っています")
   }
+}
+
+export const logout = async () => {
+  await signOut(auth)
+}
+
+export const getCurrentAuthUser = () => {
+  return auth.currentUser
+}
+
+export const monitorAuthState = (callback: (user: any) => void) => {
+  return onAuthStateChanged(auth, callback)
 }

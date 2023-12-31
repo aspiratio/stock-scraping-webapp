@@ -2,6 +2,7 @@
 import { loginWithEmailAndPassword } from "@/utils/firebaseAuth"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Button from "@/components/button"
 
 const LoginPage = () => {
   const router = useRouter()
@@ -20,27 +21,36 @@ const LoginPage = () => {
     }
   }
   return (
-    <div>
-      <h1>ログインページ</h1>
-
-      <form onSubmit={(e) => handleSubmit(e)}>
+    <form
+      onSubmit={(e) => handleSubmit(e)}
+      className="text-lg flex flex-col items-center justify-center h-screen"
+    >
+      <div className="m-4">
+        <label htmlFor="email">メールアドレス</label>
         <input
           type="email"
+          id="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="text-black"
+          className="text-black w-80 block"
         />
+      </div>
+      <div className="m-4">
+        <label htmlFor="password">パスワード</label>
         <input
           type="password"
+          id="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="text-black"
+          className="text-black w-80 block"
         />
-        <button type="submit">ログイン</button>
-      </form>
-    </div>
+      </div>
+      <Button type="submit" className="mt-8">
+        ログイン
+      </Button>
+    </form>
   )
 }
 
