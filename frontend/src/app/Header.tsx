@@ -16,10 +16,11 @@ const Header = () => {
     // ユーザーがログインしているかどうかを監視する
     const unsubscribe = monitorAuthState((user) => {
       setIsLogin(!!user)
+      !user && router.push("/login")
     })
     // コンポーネントがアンマウントされるときにリスナーをクリーンアップ
     return () => unsubscribe()
-  }, [])
+  }, [router])
 
   const onClickLogout = async () => {
     await logout()
