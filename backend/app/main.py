@@ -5,9 +5,22 @@ from dividend_scraping_service import dividend_scraping_service
 from spreadsheet_update_service import spreadsheet_update_service
 from market_update_service import market_update_service
 from utils.logger import Logger
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 logger = Logger()
+
+# 許可するオリジン TODO:本番のホスティング後に本番のオリジンを追加する
+origins = ["http://localhost:3000"]
+
+# CORSエラーを防ぐためのミドルウェアを追加する
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # 指定したオリジンのみ許可
+    allow_credentials=True,
+    allow_methods=["GET"],  # GETメソッドだけ許可
+    allow_headers=["*"],  # すべてのヘッダーを許可
+)
 
 
 async def async_update_stock_info(
