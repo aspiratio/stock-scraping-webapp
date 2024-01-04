@@ -22,7 +22,7 @@ def boot_driver():
 
     # ドライバーの起動
     driver = webdriver.Chrome(
-        service=ChromeService(ChromeDriverManager().install()),
+        # service=ChromeService(ChromeDriverManager().install()),
         options=chrome_options,
         executable_path=chrome_driver_path,
     )
