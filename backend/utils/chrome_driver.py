@@ -7,7 +7,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def boot_driver():
     print("driverを起動します")
-    time.sleep(5)  # Chromeが起動するのを待つ
     # Chrome オプションの設定
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）
@@ -19,6 +18,7 @@ def boot_driver():
     # Docker環境専用の記述
     chrome_driver_path = "/usr/local/bin/chromedriver"
 
+    time.sleep(5)  # Chromeが起動するのを待つ
     # ドライバーの起動
     driver = webdriver.Chrome(
         # service=ChromeService(ChromeDriverManager().install()),
