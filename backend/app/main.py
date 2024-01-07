@@ -14,13 +14,13 @@ logger = Logger()
 origins = ["http://localhost:3000"]
 
 # CORSエラーを防ぐためのミドルウェアを追加する
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,  # 指定したオリジンのみ許可
-#     allow_credentials=True,
-#     allow_methods=["GET"],  # GETメソッドだけ許可
-#     allow_headers=["*"],  # すべてのヘッダーを許可
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # 指定したオリジンのみ許可
+    allow_credentials=True,
+    allow_methods=["GET"],  # GETメソッドだけ許可
+    allow_headers=["*"],  # すべてのヘッダーを許可
+)
 
 
 async def async_update_stock_info(
