@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
@@ -6,6 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def boot_driver():
     print("driverを起動します")
+    time.sleep(5)  # Chromeが起動するのを待つ
     # Chrome オプションの設定
     chrome_options = Options()
     chrome_options.add_argument("--no-sandbox")  # Chrome の保護機能を無効化する（Docker環境で動かすため）
