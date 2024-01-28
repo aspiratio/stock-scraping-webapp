@@ -4,7 +4,6 @@ from stock_scraping_service import stock_scraping_service
 from dividend_scraping_service import dividend_scraping_service
 from spreadsheet_update_service import spreadsheet_update_service
 from market_update_service import market_update_service
-from symbol import parameters
 from utils.logger import Logger
 from fastapi.middleware.cors import CORSMiddleware
 
