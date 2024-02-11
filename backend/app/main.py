@@ -61,7 +61,7 @@ async def update_stock_info(
         asyncio.create_task(
             async_update_stock_info(stock, dividend, market, spreadsheet)
         )
-        return parameters
+        return {"message": parameters}
     except Exception as e:
         print("error_message: ", e)
         return {"message": "エラーです"}
