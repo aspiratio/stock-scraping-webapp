@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import time
 import requests
@@ -7,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from bs4 import BeautifulSoup
 
-from utils.chrome_driver import boot_driver
+from utils.chrome_driver import boot_driver, boot_driver_venv
 from utils.firestore_utils import (
     set_documents,
     delete_all_documents,
@@ -31,7 +32,9 @@ def _get_own_stock_df(driver):
     # SBI証券のログインページへアクセス
     url_login = "https://site2.sbisec.co.jp/ETGate/"
     driver.get(url_login)
-    time.sleep(10)  # ページに遷移する前に次の処理が実行されないようにするため
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.NAME, "user_id"))
+    )  # ログインページが表示されるまで最大10秒待つ
 
     username = driver.find_element(By.NAME, "user_id")
     password = driver.find_element(By.NAME, "user_password")
@@ -47,33 +50,23 @@ def _get_own_stock_df(driver):
 
     # ログインボタンをクリックする
     login_btn.click()
+    # ログインが完了するのを待つ
     time.sleep(10)
-    print("ログイン完了です")
 
     # 保有証券一覧ページのリンク
     url_portfolio = "https://site2.sbisec.co.jp/ETGate/?OutSide=on&_ControlID=WPLETacR002Control&_PageID=DefaultPID&_DataStoreID=DSWPLETacR002Control&getFlg=on&_ActionID=DefaultAID&_scpr=intpr%3d230120_dstock_topmypage"
-    try:
-        driver.get(url_portfolio)
-    except:
-        print("404")
 
-    time.sleep(5)
-    print(driver.page_source.encode("utf-8"))
-
-    csv_link = driver.find_element(By.XPATH, '//a[contains(text(), "CSVダウンロード")]')
-
-    # csv_link = WebDriverWait(driver, 15).until(
-    #     EC.element_to_be_clickable(
-    #         (By.XPATH, '//a[contains(@href, "CSVダウンロード")]')
-    #     )
-    # )
-    if csv_link is None:
-        print("csv_link is None")
-    else:
-        print(csv_link.text)
+    # CSVダウンロードリンクが表示されるまで最大10秒待つ
+    driver.get(url_portfolio)
+    csv_link = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, '//a[contains(text(), "CSVダウンロード")]')
+        )
+    )
     csv_link.click()
+
+    # ダウンロードが完了するのを待つ
     time.sleep(10)
-    print("ok")
 
     # # "もっと見る"ボタンが表示されなくなるまでクリックする
     # while True:
@@ -172,8 +165,10 @@ def _get_own_stock_df(driver):
 
 
 async def stock_scraping():
+    # 実行された.pyファイルが存在するディレクトリを取得
+    file_directory = os.path.dirname(os.path.abspath(__file__))
     print("boot_driverの実行")
-    driver = boot_driver()
+    driver = boot_driver(file_directory)
     print("boot_driverの完了")
     try:
         _get_own_stock_df(driver)
@@ -192,5 +187,21 @@ async def stock_scraping():
         return "done"
 
 
-# if __name__ == "__main__":
-#     stock_scraping()
+# ローカル環境でのテスト実行用
+def stock_scraping_local():
+    # 実行された.pyファイルが存在するディレクトリを取得
+    file_directory = os.path.dirname(os.path.abspath(__file__))
+    print("boot_driverの実行")
+    driver = boot_driver_venv(file_directory)
+    print("boot_driverの完了")
+    try:
+        _get_own_stock_df(driver)
+    except Exception as e:
+        print("stock_scrapingでエラーが発生しました", str(e))
+    finally:
+        if driver is not None:
+            driver.quit()
+
+
+if __name__ == "__main__":
+    stock_scraping_local()
