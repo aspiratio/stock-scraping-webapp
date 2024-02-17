@@ -166,4 +166,4 @@ cython_debug/
 sa.json
 
 # ローカル用のファイル
-.csv
+*.csv
