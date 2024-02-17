@@ -36,7 +36,7 @@ async def async_update_stock_info(
         await dividend_scraping_service.dividend_scraping()
         print("dividend_scraping: done")
 
-    if market:
+    if dividend or market:  # dividendを実行するとmarket情報が削除されるため
         print("market_update_service: start")
         await market_update_service.update_market_and_industries()
         print("market_update_service: done")
@@ -49,20 +49,19 @@ async def async_update_stock_info(
 
 @app.get("/update_stock_info")
 async def update_stock_info(
-    stock: bool = True,
-    dividend: bool = True,
-    market: bool = True,
-    spreadsheet: bool = True,
+    stock: bool = False,
+    dividend: bool = False,
+    market: bool = False,
+    spreadsheet: bool = False,
 ):
     print("リクエストを受け付けました")
+    parameters = f"stock: {stock}, dividend: {dividend}, market: {market}, spreadsheet: {spreadsheet}"
     try:
-        print(
-            f"stock: {stock}, dividend: {dividend}, market: {market}, spreadsheet: {spreadsheet}"
-        )
+        print(parameters)
         asyncio.create_task(
             async_update_stock_info(stock, dividend, market, spreadsheet)
         )
-        return {"message": "保有株情報を更新中です"}
+        return {"message": parameters}
     except Exception as e:
         print("error_message: ", e)
         return {"message": "エラーです"}
