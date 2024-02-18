@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 # Docker環境用
-def boot_driver(download_directory):
+def boot_driver(download_directory=""):
     print("driverを起動します")
 
     # Chrome オプションの設定
@@ -15,17 +15,17 @@ def boot_driver(download_directory):
     chrome_options.add_argument("--headless")  # ヘッドレスモードを有効にする
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_experimental_option(
-        "prefs",
-        {"download.default_directory": download_directory},
-    )
+    if download_directory:
+        chrome_options.add_experimental_option(
+            "prefs",
+            {"download.default_directory": download_directory},
+        )
 
     # Docker環境専用の記述
     chrome_driver_path = "/usr/local/bin/chromedriver"
 
     # ドライバーの起動
     driver = webdriver.Chrome(
-        # ChromeDriverManager().install(), Docker環境で動かすときは不要
         options=chrome_options,
         executable_path=chrome_driver_path,
     )
@@ -34,15 +34,16 @@ def boot_driver(download_directory):
 
 
 # venv環境用
-def boot_driver_venv(download_directory):
+def boot_driver_venv(download_directory=""):
     print("driverを起動します")
 
     # Chrome オプションの設定
     chrome_options = Options()
-    chrome_options.add_experimental_option(
-        "prefs",
-        {"download.default_directory": download_directory},
-    )
+    if download_directory:
+        chrome_options.add_experimental_option(
+            "prefs",
+            {"download.default_directory": download_directory},
+        )
 
     # ドライバーの起動
     driver = webdriver.Chrome(
