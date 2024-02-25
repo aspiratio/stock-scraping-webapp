@@ -2,6 +2,7 @@
 import axios from "axios"
 import Button from "@/components/button"
 import { useState } from "react"
+import { updateStockInfo } from "@/utils/request"
 
 const Home = () => {
   const [isStock, setIsStock] = useState<boolean>(false)
@@ -11,22 +12,7 @@ const Home = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    // それぞれのチェックボックスの状態をログに出力
-    console.log("isStock:", isStock)
-    console.log("isDividend:", isDividend)
-    console.log("isMarket:", isMarket)
-    console.log("isSpreadsheet:", isSpreadsheet)
-    axios
-      .get(
-        `https://stock-scraping-service-bp6w7fuqsq-an.a.run.app/update_stock_info?stock=${isStock}&dividend=${isDividend}&market=${isMarket}&spreadsheet=${isSpreadsheet}`
-      )
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    await updateStockInfo(isStock, isDividend, isMarket, isSpreadsheet)
   }
   return (
     <form
