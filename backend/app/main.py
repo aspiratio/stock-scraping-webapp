@@ -10,8 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 logger = Logger()
 
-# 許可するオリジン TODO:本番のホスティング後に本番のオリジンを追加する
-origins = ["http://localhost:3000"]
+# 許可するオリジン
+origins = ["http://localhost:3000", "https://stock-scraping-webapp.vercel.app"]
 
 # CORSエラーを防ぐためのミドルウェアを追加する
 app.add_middleware(
