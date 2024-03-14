@@ -6,7 +6,7 @@ export const updateStockInfo = async (
   isMarket: boolean,
   isSpreadsheet: boolean
 ) => {
-  axios
+  await axios
     .get(
       `${process.env.NEXT_PUBLIC_CLOUDRUN_URL}/update_stock_info?stock=${isStock}&dividend=${isDividend}&market=${isMarket}&spreadsheet=${isSpreadsheet}`
     )

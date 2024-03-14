@@ -3,6 +3,7 @@ import Button from "@/components/button"
 import { useState } from "react"
 import { updateStockInfo } from "@/utils/request"
 import ConfirmDialog from "@/components/dialog"
+import Loading from "@/components/loading"
 
 const Home = () => {
   const [isStock, setIsStock] = useState<boolean>(false)
@@ -10,14 +11,17 @@ const Home = () => {
   const [isMarket, setIsMarket] = useState<boolean>(false)
   const [isSpreadsheet, setIsSpreadsheet] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleDialogOpen = () => {
     setIsDialogOpen(!isDialogOpen)
   }
 
   const submitRequest = async () => {
-    await updateStockInfo(isStock, isDividend, isMarket, isSpreadsheet)
+    setIsLoading(true)
     handleDialogOpen()
+    await updateStockInfo(isStock, isDividend, isMarket, isSpreadsheet)
+    setIsLoading(false)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,9 +84,13 @@ const Home = () => {
           />
           <label htmlFor="spreadsheet">スプレッドシート</label>
         </div>
-        <Button type="submit" className="mt-8">
-          送信
-        </Button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Button type="submit" className="mt-8">
+            送信
+          </Button>
+        )}
       </form>
     </>
   )
