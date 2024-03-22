@@ -7,7 +7,7 @@ import {
   doc,
 } from "firebase/firestore"
 
-type OwnStock = {
+export type OwnStock = {
   current_price: number
   last_updated_time: Timestamp
   name: string
@@ -16,7 +16,7 @@ type OwnStock = {
   ticker: string
 }
 
-type StockInfo = {
+export type StockInfo = {
   dividend_yen: number
   industries: string
   last_updated_time: Timestamp
