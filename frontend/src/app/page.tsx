@@ -4,6 +4,7 @@ import { useState } from "react"
 import { updateStockInfo } from "@/utils/request"
 import ConfirmDialog from "@/components/dialog"
 import Loading from "@/components/loading"
+import { useFirestoreSubscription } from "@/utils/hooks/useFirestoreSubscription"
 
 const Home = () => {
   const [isStock, setIsStock] = useState<boolean>(false)
@@ -12,6 +13,8 @@ const Home = () => {
   const [isSpreadsheet, setIsSpreadsheet] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const { ownStockData, stockInfoData } = useFirestoreSubscription()
 
   const handleDialogOpen = () => {
     setIsDialogOpen(!isDialogOpen)
@@ -42,43 +45,58 @@ const Home = () => {
       )}
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="text-lg flex flex-col justify-center h-screen w-1/2 mx-auto"
+        className="text-xl flex flex-col justify-center h-screen w-3/4 max-w-md mx-auto gap-2"
       >
         <div>
           <input
             type="checkbox"
             id="stock"
-            className="mr-2"
+            className="mr-2 size-4"
             checked={isStock}
             onChange={(e) => setIsStock(e.target.checked)}
           />
-          <label htmlFor="stock">保有株情報</label>
+          <label htmlFor="stock">
+            保有株情報
+            <span className="block text-base ml-6">
+              {ownStockData?.last_updated_time.toDate().toLocaleString()}
+            </span>
+          </label>
         </div>
         <div>
           <input
             type="checkbox"
             id="dividend"
-            className="mr-2"
+            className="mr-2 size-4"
             checked={isDividend}
             onChange={(e) => setIsDividend(e.target.checked)}
           />
-          <label htmlFor="dividend">配当金情報</label>
+          <label htmlFor="dividend">
+            配当金情報
+            <span className="block text-base ml-6">
+              {stockInfoData?.last_updated_time.toDate().toLocaleString()}
+            </span>
+          </label>
         </div>
         <div>
           <input
             type="checkbox"
             id="market"
-            className="mr-2"
+            className="mr-2 size-4"
             checked={isMarket}
             onChange={(e) => setIsMarket(e.target.checked)}
           />
-          <label htmlFor="market">業種情報</label>
+          <label htmlFor="market">
+            業種情報
+            <span className="block text-base ml-6">
+              {stockInfoData?.last_updated_time.toDate().toLocaleString()}
+            </span>
+          </label>
         </div>
         <div>
           <input
             type="checkbox"
             id="spreadsheet"
-            className="mr-2"
+            className="mr-2 size-4"
             checked={isSpreadsheet}
             onChange={(e) => setIsSpreadsheet(e.target.checked)}
           />
