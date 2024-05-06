@@ -132,7 +132,7 @@ async def stock_scraping():
         delete_all_documents(collection_name)
         set_documents(collection_name, list_own_stock)
     except Exception as e:
-        print("stock_scrapingでエラーが発生しました", str(e))
+        raise Exception("stock_scrapingでエラーが発生しました", str(e))
     finally:
         if driver is not None:
             driver.quit()
@@ -155,7 +155,7 @@ def stock_scraping_local():
         delete_all_documents(collection_name)
         set_documents(collection_name, list_own_stock)
     except Exception as e:
-        print("stock_scrapingでエラーが発生しました", str(e))
+        raise Exception("stock_scrapingでエラーが発生しました", str(e))
     finally:
         if driver is not None:
             driver.quit()
