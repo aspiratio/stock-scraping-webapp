@@ -60,7 +60,7 @@ async def dividend_scraping():
         set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
-        print("append_dividendでエラーが発生しました: ", str(e))
+        raise Exception("append_dividendでエラーが発生しました: ", str(e))
     finally:
         driver.quit()
 
@@ -82,7 +82,7 @@ def dividend_scraping_local():
         set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
-        print("append_dividendでエラーが発生しました: ", str(e))
+        raise Exception("append_dividendでエラーが発生しました: ", str(e))
     finally:
         driver.quit()
 
