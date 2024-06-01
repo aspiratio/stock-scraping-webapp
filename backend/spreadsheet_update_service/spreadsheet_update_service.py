@@ -1,8 +1,17 @@
 import pandas as pd
 import gspread
 import google.auth
+import logging
+from google.cloud import logging as cloud_logging
 from utils import config
 from utils.firestore_utils import get_all_document_values
+
+# Cloud Logging クライアントを初期化
+client = cloud_logging.Client()
+client.setup_logging()
+
+# ロガーを取得
+logger = logging.getLogger("uvicorn")
 
 
 def _create_gspread_client():
@@ -29,7 +38,7 @@ async def spreadsheet_update():
     stock_info_list = get_all_document_values("stock_info")
     stock_info_df = pd.DataFrame(stock_info_list)
 
-    print("DBからデータを取得しました")
+    logger.info("DBからデータを取得しました")
 
     # 企業コードでJOINする
     stock_merged_df = pd.merge(own_stock_df, stock_info_df, on="ticker", how="left")
@@ -66,5 +75,7 @@ async def spreadsheet_update():
     # シートのB4:J4からデータフレームの値を書き込む
     cell_range = f"B4:I{3 + len(stock_list)}"
     worksheet.update(cell_range, stock_list)
+
+    logger.info("スプレッドシートを更新しました")
 
     return "done"

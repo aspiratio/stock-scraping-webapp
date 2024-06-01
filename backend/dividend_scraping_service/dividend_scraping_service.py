@@ -1,3 +1,5 @@
+import logging
+from google.cloud import logging as cloud_logging
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,9 +9,16 @@ from selenium.common.exceptions import TimeoutException
 from utils.chrome_driver import boot_driver, boot_driver_venv
 from utils.firestore_utils import get_all_document_ids, set_documents
 
+# Cloud Logging クライアントを初期化
+client = cloud_logging.Client()
+client.setup_logging()
+
+# ロガーを取得
+logger = logging.getLogger("uvicorn")
+
 
 def _process_stock(driver, ticker):
-    print(f"{ticker} start")
+    logger.info(f"{ticker} start")
     # 配当ページへアクセス
     url_dividend = f"https://minkabu.jp/stock/{ticker}/dividend"
     driver.get(url_dividend)
@@ -32,14 +41,14 @@ def _process_stock(driver, ticker):
         )
     except TimeoutException:
         # 予想配当金がないものは0円として処理する
-        print(f"{ticker} skipped")
+        logger.warning(f"{ticker} skipped")
         return 0
 
     # 1株配当金を取得する
     dividend_integer = dividend_elements[0].text.strip()
     dividend_decimal = dividend_decimal_elements[0].text.strip()
     dividend = float(dividend_integer + dividend_decimal)
-    print(f"{ticker} finish")
+    logger.info(f"{ticker} finish")
     return dividend
 
 
@@ -60,6 +69,7 @@ async def dividend_scraping():
         set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
+        logger.error("append_dividendでエラーが発生しました: ", exc_info=e)
         raise Exception("append_dividendでエラーが発生しました: ", str(e))
     finally:
         driver.quit()
@@ -82,6 +92,7 @@ def dividend_scraping_local():
         set_documents(output_collection_name, results)
         return "done"
     except Exception as e:
+        logger.error("append_dividendでエラーが発生しました: ", exc_info=e)
         raise Exception("append_dividendでエラーが発生しました: ", str(e))
     finally:
         driver.quit()

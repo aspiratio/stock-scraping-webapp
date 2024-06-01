@@ -1,11 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+import logging
+from google.cloud import logging as cloud_logging
+
+# Cloud Logging クライアントを初期化
+client = cloud_logging.Client()
+client.setup_logging()
+
+# ロガーを取得
+logger = logging.getLogger("uvicorn")
 
 
 # Docker環境用
 def boot_driver(download_directory=""):
-    print("driverを起動します")
+    logger.info("driverを起動します")
 
     # Chrome オプションの設定
     chrome_options = Options()
@@ -29,13 +38,13 @@ def boot_driver(download_directory=""):
         options=chrome_options,
         executable_path=chrome_driver_path,
     )
-    print("driverを起動しました")
+    logger.info("driverを起動しました")
     return driver
 
 
 # venv環境用
 def boot_driver_venv(download_directory=""):
-    print("driverを起動します")
+    logger.info("driverを起動します")
 
     # Chrome オプションの設定
     chrome_options = Options()
@@ -50,5 +59,5 @@ def boot_driver_venv(download_directory=""):
         ChromeDriverManager().install(),
         options=chrome_options,
     )
-    print("driverを起動しました")
+    logger.info("driverを起動しました")
     return driver

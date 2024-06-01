@@ -1,14 +1,21 @@
 from fastapi import FastAPI
 import asyncio
+import logging
 from stock_scraping_service import stock_scraping_service
 from dividend_scraping_service import dividend_scraping_service
 from spreadsheet_update_service import spreadsheet_update_service
 from market_update_service import market_update_service
-from utils.logger import Logger
+from google.cloud import logging as cloud_logging
 from fastapi.middleware.cors import CORSMiddleware
 
+# Cloud Logging クライアントを初期化
+client = cloud_logging.Client()
+client.setup_logging()
+
+# ロガーを取得
+logger = logging.getLogger("uvicorn")
+
 app = FastAPI()
-logger = Logger()
 
 # 許可するオリジン
 origins = ["http://localhost:3000", "https://stock-scraping-webapp.vercel.app"]
@@ -27,24 +34,24 @@ async def async_update_stock_info(
     stock: bool, dividend: bool, market: bool, spreadsheet: bool
 ):
     if stock:
-        print("stock_scraping: start")
+        logger.info("stock_scraping: start")
         await stock_scraping_service.stock_scraping()
-        print("stock_scraping: done")
+        logger.info("stock_scraping: done")
 
     if dividend:
-        print("dividend_scraping: start")
+        logger.info("dividend_scraping: start")
         await dividend_scraping_service.dividend_scraping()
-        print("dividend_scraping: done")
+        logger.info("dividend_scraping: done")
 
     if dividend or market:  # dividendを実行するとmarket情報が削除されるため
-        print("market_update_service: start")
+        logger.info("market_update_service: start")
         await market_update_service.update_market_and_industries()
-        print("market_update_service: done")
+        logger.info("market_update_service: done")
 
     if spreadsheet:
-        print("spreadsheet_update: start")
+        logger.info("spreadsheet_update: start")
         await spreadsheet_update_service.spreadsheet_update()
-        print("spreadsheet_update: done")
+        logger.info("spreadsheet_update: done")
 
 
 @app.get("/update_stock_info")
@@ -54,14 +61,14 @@ async def update_stock_info(
     market: bool = False,
     spreadsheet: bool = False,
 ):
-    print("リクエストを受け付けました")
+    logger.info("リクエストを受け付けました")
     parameters = f"stock: {stock}, dividend: {dividend}, market: {market}, spreadsheet: {spreadsheet}"
     try:
-        print(parameters)
+        logger.info(parameters)
         asyncio.create_task(
             async_update_stock_info(stock, dividend, market, spreadsheet)
         )
         return {"message": parameters}
     except Exception as e:
-        print("error_message: ", e)
+        logger.error("error_message: ", exc_info=e)
         return {"message": "エラーです"}
