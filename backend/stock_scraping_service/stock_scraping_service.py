@@ -3,6 +3,8 @@ import pandas as pd
 import time
 from io import StringIO
 import requests
+import logging
+from google.cloud import logging as cloud_logging
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,6 +20,13 @@ from utils import config
 
 import re
 
+# Cloud Logging クライアントを初期化
+client = cloud_logging.Client()
+client.setup_logging()
+
+# ロガーを取得
+logger = logging.getLogger("uvicorn")
+
 
 def extract_number(text):
     """
@@ -28,7 +37,7 @@ def extract_number(text):
 
 
 def _get_own_stock_df(driver, file_directory):
-    print("SBI scraping started...")
+    logger.info("SBI scraping started...")
 
     # SBI証券のログインページへアクセス
     url_login = "https://site2.sbisec.co.jp/ETGate/"
@@ -120,9 +129,9 @@ def _get_own_stock_df(driver, file_directory):
 async def stock_scraping():
     # 実行された.pyファイルが存在するディレクトリを取得
     file_directory = os.path.dirname(os.path.abspath(__file__))
-    print("boot_driverの実行")
+    logger.info("boot_driverの実行")
     driver = boot_driver(file_directory)
-    print("boot_driverの完了")
+    logger.info("boot_driverの完了")
     try:
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
@@ -132,6 +141,7 @@ async def stock_scraping():
         delete_all_documents(collection_name)
         set_documents(collection_name, list_own_stock)
     except Exception as e:
+        logger.error("stock_scrapingでエラーが発生しました", exc_info=e)
         raise Exception("stock_scrapingでエラーが発生しました", str(e))
     finally:
         if driver is not None:
@@ -143,9 +153,9 @@ async def stock_scraping():
 def stock_scraping_local():
     # このファイルが存在するディレクトリを取得（ここにCSVをダウンロードする）
     file_directory = os.path.dirname(os.path.abspath(__file__))
-    print("boot_driverの実行")
+    logger.info("boot_driverの実行")
     driver = boot_driver_venv(file_directory)
-    print("boot_driverの完了")
+    logger.info("boot_driverの完了")
     try:
         collection_name = "own_stock"
         # 証券会社のwebサイトから保有株情報を抽出する
@@ -155,6 +165,7 @@ def stock_scraping_local():
         delete_all_documents(collection_name)
         set_documents(collection_name, list_own_stock)
     except Exception as e:
+        logger.error("stock_scrapingでエラーが発生しました", exc_info=e)
         raise Exception("stock_scrapingでエラーが発生しました", str(e))
     finally:
         if driver is not None:
