@@ -22,11 +22,14 @@ def _process_stock(driver, ticker):
     # 配当ページへアクセス
     url_dividend = f"https://minkabu.jp/stock/{ticker}/dividend"
     driver.get(url_dividend)
+    logger.info("ページ遷移")
     # ページが読み込まれるまで待機する（本来はwait.untilでいいはずだが、時々うまく機能しないため別途sleepを入れている）
-    time.sleep(5)
+    time.sleep(10)
+    logger.info("sleep終了")
 
     # 要素が表示されるまで待機する
     wait = WebDriverWait(driver, 10)
+    logger.info("要素表示が完了")
 
     try:
         dividend_elements = wait.until(
