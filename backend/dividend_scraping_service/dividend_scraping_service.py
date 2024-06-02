@@ -24,11 +24,11 @@ def _process_stock(driver, ticker):
     driver.get(url_dividend)
     logger.info("ページ遷移")
     # ページが読み込まれるまで待機する（本来はwait.untilでいいはずだが、時々うまく機能しないため別途sleepを入れている）
-    time.sleep(10)
+    time.sleep(2)
     logger.info("sleep終了")
 
     # 要素が表示されるまで待機する
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 6)
     logger.info("要素表示が完了")
 
     try:
